@@ -42,3 +42,7 @@ npm install @angular/animations@latest --legacy-peer-deps
 ## navigate to
 
 http://localhost
+
+
+## Install MSAL Packages in Angular
+npm install @azure/msal-browser @azure/msal-angular
