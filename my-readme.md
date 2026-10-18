@@ -1,6 +1,6 @@
 ## install primeng
 
-npm install primeng @primeuix/themes --legacy-peer-deps
+npm install primeng@21 @primeng/themes@21 --legacy-peer-deps
 
  
 ```typescipt
