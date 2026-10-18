@@ -34,4 +34,11 @@ npm audit fix --legacy-peer-deps`
 ## global install
 npm install --legacy-peer-deps
 
-## update to angular
+
+## install angular animation
+npm install @angular/animations@latest --legacy-peer-deps
+
+
+## navigate to
+
+http://localhost
