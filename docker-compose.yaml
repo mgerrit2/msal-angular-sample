@@ -1,0 +1,14 @@
+services:
+  # De Angular Frontend
+  frontend:
+    container_name: angular-frontend
+    build: .
+    ports:
+      - "80:80" # Bezoek je app op http://localhost
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
