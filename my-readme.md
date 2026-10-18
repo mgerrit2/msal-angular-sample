@@ -22,5 +22,11 @@ export const appConfig: ApplicationConfig = {
     })
   ]
 };
+```
 
-´´´
+## Adding bootstrap
+
+npm install bootstrap @popperjs/core  --legacy-peer-deps
+
+## fix
+npm audit fix --legacy-peer-deps`
