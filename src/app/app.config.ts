@@ -1,10 +1,46 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {providePrimeNG} from 'primeng/config';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import Aura from '@primeuix/themes/aura';
+
+import {
+  IPublicClientApplication,
+  PublicClientApplication,
+  InteractionType,
+  BrowserCacheLocation
+} from '@azure/msal-browser';
+import {
+  MSAL_INSTANCE,
+  MSAL_GUARD_CONFIG,
+  MSAL_INTERCEPTOR_CONFIG,
+  MsalService,
+  MsalGuard,
+  MsalBroadcastService, MsalModule
+} from '@azure/msal-angular';
+import { msalConfig } from './auth-config'; // Pointing to the config file you created earlier
+
+// 1. Initialize the MSAL Instance
+export function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication(msalConfig);
+}
+
+// 2. (Optional) Configure Guard to protect specific routes
+export function MSALGuardConfigFactory() {
+  return {
+    interactionType: InteractionType.Redirect, // or InteractionType.Popup
+    authRequest: {
+      scopes: ['user.read'] // Add any default scopes your app needs on login
+    }
+  };
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +55,29 @@ export const appConfig: ApplicationConfig = {
           darkModeSelector: '.my-app-dark' // optional
         }
       }
-    })
+    }),
+    // --- MSAL Module Configuratie (Vervangt de losse providers) ---
+    importProvidersFrom(
+      MsalModule.forRoot(
+        new PublicClientApplication(msalConfig),
+        {
+          // Guard configuratie
+          interactionType: InteractionType.Redirect,
+          authRequest: {
+            scopes: ['user.read']
+          }
+        },
+        {
+          // Interceptor configuratie (optioneel voor later als je API's aanroept)
+          interactionType: InteractionType.Redirect,
+          protectedResourceMap: new Map([
+            ['https://graph.microsoft.com/v1.0/me', ['user.read']]
+          ])
+        }
+      )
+    ),
+    MsalService,
+    MsalGuard,
+    MsalBroadcastService
   ]
 };

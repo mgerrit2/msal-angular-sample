@@ -1,0 +1,17 @@
+<div class="profile-container" *ngIf="profileData; else noProfile">
+  <h2>Welkom, {{ profileData.name }}!</h2>
+
+  <div class="card">
+    <h3>Profielgegevens:</h3>
+    <ul>
+      <li><strong>Naam:</strong> {{ profileData.name }}</li>
+      <li><strong>Gebruikersnaam / E-mail:</strong> {{ profileData.username }}</li>
+      <li><strong>Account ID:</strong> {{ profileData.homeAccountId }}</li>
+      <li><strong>Environment:</strong> {{ profileData.environment }}</li>
+    </ul>
+  </div>
+</div>
+
+<ng-template #noProfile>
+  <p>Geen profielgegevens gevonden. Zorg ervoor dat je bent ingelogd.</p>
+</ng-template>
