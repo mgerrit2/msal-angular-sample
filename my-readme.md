@@ -30,3 +30,8 @@ npm install bootstrap @popperjs/core  --legacy-peer-deps
 
 ## fix
 npm audit fix --legacy-peer-deps`
+
+## global install
+npm install
+
+## update to angular
