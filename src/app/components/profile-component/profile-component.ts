@@ -11,11 +11,17 @@ import { AccountInfo } from '@azure/msal-browser';
 })
 export class ProfileComponent implements OnInit {
   profileData?: AccountInfo;
+  idTokenClaims: any;
 
   constructor(private authService: MsalService) {}
 
   ngOnInit(): void {
     // Haal het actieve account op uit de MSAL instantie
     this.profileData = this.authService.instance.getActiveAccount() || undefined;
+
+    // 2. Extract specific claims if available
+    if (this.profileData) {
+      this.idTokenClaims = this.profileData.idTokenClaims;
+    }
   }
 }

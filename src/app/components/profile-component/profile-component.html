@@ -1,17 +1,19 @@
-<div class="profile-container" *ngIf="profileData; else noProfile">
-  <h2>Welkom, {{ profileData.name }}!</h2>
+<div *ngIf="profileData">
+  <h2>User Profile</h2>
+  <p><strong>Full Name:</strong> {{ profileData.name }}</p>
+  <p><strong>Email / Username:</strong> {{ profileData.username }}</p>
+  <p><strong>Tenant ID:</strong> {{ profileData.tenantId }}</p>
 
-  <div class="card">
-    <h3>Profielgegevens:</h3>
-    <ul>
-      <li><strong>Naam:</strong> {{ profileData.name }}</li>
-      <li><strong>Gebruikersnaam / E-mail:</strong> {{ profileData.username }}</li>
-      <li><strong>Account ID:</strong> {{ profileData.homeAccountId }}</li>
-      <li><strong>Environment:</strong> {{ profileData.environment }}</li>
-    </ul>
-  </div>
+  <hr>
+
+  <h3>Extra Token Claims</h3>
+  <ul>
+    <li><strong>First Name (given_name):</strong> {{ idTokenClaims?.given_name }}</li>
+    <li><strong>Last Name (family_name):</strong> {{ idTokenClaims?.family_name }}</li>
+    <li><strong>User Object ID (oid):</strong> {{ idTokenClaims?.oid }}</li>
+  </ul>
 </div>
 
-<ng-template #noProfile>
-  <p>Geen profielgegevens gevonden. Zorg ervoor dat je bent ingelogd.</p>
-</ng-template>
+<div *ngIf="!profileData">
+  <p>No active account found. Please log in.</p>
+</div>
