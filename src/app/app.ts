@@ -49,9 +49,14 @@ export class App implements OnInit, OnDestroy {
         label: 'profile',
         icon: 'pi pi-home',
         routerLink: ['/profile']
+      },
+      {
+        label: 'API call',
+        icon: 'pi pi-home',
+        routerLink: ['/app-api-call-component']
       }
-
     ]
+
 
     // Direct de login-status instellen na het verwerken
     this.setLoginDisplay();
