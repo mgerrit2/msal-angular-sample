@@ -28,8 +28,14 @@ import {
 import { msalConfig } from './auth-config'; // Pointing to the config file you created earlier
 
 // 1. Initialize the MSAL Instance
-export function MSALInstanceFactory(): IPublicClientApplication {
-  return new PublicClientApplication(msalConfig);
+export function MSALInstanceFactory(): PublicClientApplication {
+  return new PublicClientApplication({
+    auth: {
+      clientId: '1d2796fb-6f52-4590-b6be-c22dbba8e30a',
+      authority: 'https://login.microsoftonline.com/aafea113-8a60-476f-97e1-f518d6cd5db0',
+      redirectUri: 'http://localhost:4200'
+    }
+  });
 }
 
 // 2. (Optional) Configure Guard to protect specific routes
@@ -78,6 +84,15 @@ export const appConfig: ApplicationConfig = {
     ),
     MsalService,
     MsalGuard,
+    {
+      provide: MSAL_INTERCEPTOR_CONFIG,
+      useValue: {
+        interactionType: InteractionType.Redirect,
+        protectedResourceMap: new Map([
+          ['http://localhost:8080/api/', ['api://YOUR_SPRING_BOOT_CLIENT_ID/access_as_user']]
+        ])
+      }
+    },
     MsalBroadcastService
   ]
 };
