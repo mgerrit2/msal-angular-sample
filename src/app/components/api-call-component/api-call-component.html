@@ -1,8 +1,18 @@
 <p>api-call-component works!</p>
 
+<form [formGroup]="form" >
+
 <p-button label="Call api"
           icon="pi pi-check"
           (onClick)="callApi()"
->
+> </p-button>
+<input
+  type="text"
+  pInputText
+  formControlName="apiResponseData"
+  placeholder="API response will appear here..."
+  readonly
+  style="width: 100%;"
+/>
 
-</p-button>
+</form>

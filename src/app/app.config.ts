@@ -23,9 +23,10 @@ import {
   MSAL_INTERCEPTOR_CONFIG,
   MsalService,
   MsalGuard,
-  MsalBroadcastService, MsalModule
+  MsalBroadcastService, MsalModule, MsalInterceptor
 } from '@azure/msal-angular';
-import { msalConfig } from './auth-config'; // Pointing to the config file you created earlier
+import { msalConfig } from './auth-config';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http'; // Pointing to the config file you created earlier
 
 // 1. Initialize the MSAL Instance
 export function MSALInstanceFactory(): PublicClientApplication {
@@ -50,6 +51,12 @@ export function MSALGuardConfigFactory() {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(withInterceptorsFromDi()),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true
+    },
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
@@ -62,26 +69,11 @@ export const appConfig: ApplicationConfig = {
         }
       }
     }),
-    // --- MSAL Module Configuratie (Vervangt de losse providers) ---
-    importProvidersFrom(
-      MsalModule.forRoot(
-        new PublicClientApplication(msalConfig),
-        {
-          // Guard configuratie
-          interactionType: InteractionType.Redirect,
-          authRequest: {
-            scopes: ['user.read']
-          }
-        },
-        {
-          // Interceptor configuratie (optioneel voor later als je API's aanroept)
-          interactionType: InteractionType.Redirect,
-          protectedResourceMap: new Map([
-            ['https://graph.microsoft.com/v1.0/me', ['user.read']]
-          ])
-        }
-      )
-    ),
+    // --- CRITICAL: Bind your MSAL instance factory here ---
+    {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory
+    },
     MsalService,
     MsalGuard,
     {
@@ -89,7 +81,7 @@ export const appConfig: ApplicationConfig = {
       useValue: {
         interactionType: InteractionType.Redirect,
         protectedResourceMap: new Map([
-          ['http://localhost:8080/api/', ['api://YOUR_SPRING_BOOT_CLIENT_ID/access_as_user']]
+          ['http://localhost:8080/api/', ['api://3b2948af-005e-461a-bcfe-3024f8239c32/access_as_user']]
         ])
       }
     },
