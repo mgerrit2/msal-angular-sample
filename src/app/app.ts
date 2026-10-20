@@ -9,10 +9,11 @@ import { filter, takeUntil } from 'rxjs/operators';
 import {ButtonModule} from 'primeng/button';
 import {CommonModule} from '@angular/common';
 import {environment} from '../environments/environment';
+import {Spinner} from './components/spinner/spinner';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MenubarModule,CommonModule, ButtonModule],
+  imports: [RouterOutlet, MenubarModule,CommonModule, ButtonModule, Spinner],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

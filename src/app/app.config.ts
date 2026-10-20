@@ -21,8 +21,9 @@ import {
   MsalGuard,
   MsalBroadcastService, MsalModule, MsalInterceptor
 } from '@azure/msal-angular';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {environment} from '../environments/environment'; // Pointing to the config file you created earlier
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi} from '@angular/common/http';
+import {environment} from '../environments/environment';
+import {ajaxBusyInterceptor} from '../interceptor/ajax-busy-interceptor'; // Pointing to the config file you created earlier
 
 // 1. Initialize the MSAL Instance
 export function MSALInstanceFactory(): PublicClientApplication {
@@ -47,6 +48,15 @@ export function MSALGuardConfigFactory() {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withInterceptors([ajaxBusyInterceptor]) // <--- 2. Registreer functionele interceptors hier
+    ),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor, // MsalInterceptor blijft via DI / HTTP_INTERCEPTORS werken
+      multi: true
+    },
     provideHttpClient(withInterceptorsFromDi()),
     {
       provide: HTTP_INTERCEPTORS,
