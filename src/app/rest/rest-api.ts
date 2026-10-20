@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable, from, switchMap, catchError} from 'rxjs';
+import {Observable, from, switchMap, catchError, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../environments/environment';
 
@@ -53,14 +53,18 @@ export class RestApi {
       })
     ).pipe(
       catchError((error) => {
-        console.warn('Silent token acquisition failed, opening consent popup...', error);
-        // Force the interactive popup when silent fails (e.g. missing consent)
-        return from(
-          this.msalService.instance.acquireTokenPopup({
-            scopes: this.scopes,
-            account: account
-          })
-        );
+        console.warn('Silent token acquisition failed, redirecting for consent...', error);
+
+        // Stuur de gebruiker door via redirect in plaats van een popup te openen
+        this.msalService.instance.acquireTokenRedirect({
+          scopes: this.scopes,
+          account: account,
+          // Optioneel: geef specifiek mee waar ze naartoe moeten na geslaagde toestemming
+          redirectUri: environment.redirectUri
+        });
+
+        // Geef een lege of error Observable terug omdat de pagina nu wegreidirect
+        return throwError(() => error);
       }),
       switchMap((response) => {
         const headers = new HttpHeaders({
