@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, from, switchMap, catchError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RestApi {
 
-  private apiUrl = 'http://localhost:8080/api/protected';
+  private endpoint = '/protected';
   private scopes = ['api://3b2948af-005e-461a-bcfe-3024f8239c32/access_as_user'];
 
   constructor(
@@ -41,7 +42,7 @@ export class RestApi {
         const headers = new HttpHeaders({
           'Authorization': `Bearer ${response.accessToken}`
         });
-        return this.http.get(this.apiUrl, { headers, responseType: 'text' });
+        return this.http.get(`${environment.apiUrl}/api/protected`, { headers, responseType: 'text' });
       })
     );
 
