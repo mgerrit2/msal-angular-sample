@@ -12,41 +12,102 @@ To show spinner with slow rest api call
 
 #### The interceptor implementation
 ``` java
-package com.gscience.security.controller.auth.m2m
-
-import io.swagger.v3.oas.annotations.tags.Tag
-import org.apache.logging.log4j.LogManager
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import { inject } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
+import {AjaxBusyService} from '../services/ajax/ajax-busy-service';
 
 
-@RestController
-@RequestMapping("/api/{version}/m2m")
-@Tag(name = "M2m Machine to machine controller")
-class M2mController(
-    private val m2mService: M2mService
-) {
+export const ajaxBusyInterceptor: HttpInterceptorFn = (req, next) => {
+  // Use inject() to get the service instance
+  const busyService = inject(AjaxBusyService);
 
-    private val log = LogManager.getLogger(M2mController::class.java)
+  busyService.beginRequest(); // Start the busy state logic
 
-    @PostMapping(
-        value = [""],
-        produces = [
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_PROBLEM_JSON_VALUE
-        ]
-    )
-    fun doMachineTomachineOp(): ResponseEntity<Void> {
-        val result = m2mService.createM2mData()
+  // Handle the request and ensure endRequest is called on success/failure/cancellation
+  return next(req).pipe(
+    finalize(() => {
+      busyService.endRequest(); // End the busy state logic
+    })
+  );
+};
+```
 
-        log.info (result)
+#### The spinner service implementation
+``` java
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable} from 'rxjs';
 
-        // Returns a 201 Created status with no body
-        return ResponseEntity.status(HttpStatus.CREATED).build()
-    }
+@Injectable({
+  providedIn: 'root'
+})
+export class SpinnerService {
+
+   // Private Subject for emission (best practice)
+  private readonly spinnerSubject = new BehaviorSubject<boolean>(false);
+
+  // Public Observable for consumption
+  public spinnerObservable: Observable<boolean> = this.spinnerSubject.asObservable();
+
+  constructor() { }
+
+  show(): void {
+    console.log('SpinnerService: SETTING TRUE (Emitted)');
+    this.spinnerSubject.next(true); 
+  }
+
+  hide(): void {
+    console.log('SpinnerService: SETTING FALSE (Emitted)');
+    this.spinnerSubject.next(false);
+  }
+
+
 }
+```
+
+#### ApplicationConfig
+``` java
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withInterceptors([ajaxBusyInterceptor]) // <--- insert the axaj interceptor
+    ),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true
+    },
+    provideBrowserGlobalErrorListeners(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes),
+    provideAnimationsAsync(),
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+        options: {
+          darkModeSelector: '.my-app-dark' // optional
+        }
+      }
+    }),
+    // --- CRITICAL: Bind your MSAL instance factory here ---
+    {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory
+    },
+    MsalService,
+    MsalGuard,
+    {
+      provide: MSAL_INTERCEPTOR_CONFIG,
+      useValue: {
+        interactionType: InteractionType.Redirect,
+        protectedResourceMap: new Map([
+          [environment.apiUrl, [environment.scopes]]
+        ])
+      }
+    },
+    MsalBroadcastService
+  ]
+};
+
 ```
