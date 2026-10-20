@@ -1,6 +1,5 @@
 import {
   ApplicationConfig,
-  importProvidersFrom,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection
 } from '@angular/core';
@@ -12,14 +11,11 @@ import {provideAnimationsAsync} from '@angular/platform-browser/animations/async
 import Aura from '@primeuix/themes/aura';
 
 import {
-  IPublicClientApplication,
   PublicClientApplication,
-  InteractionType,
-  BrowserCacheLocation
+  InteractionType
 } from '@azure/msal-browser';
 import {
   MSAL_INSTANCE,
-  MSAL_GUARD_CONFIG,
   MSAL_INTERCEPTOR_CONFIG,
   MsalService,
   MsalGuard,
