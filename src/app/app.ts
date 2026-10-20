@@ -60,7 +60,7 @@ export class App implements OnInit, OnDestroy {
     ]
     //endregion
 
-    // Listen for successful login events
+    //region Listen for successful login events
     try {
       await firstValueFrom(
         this.msalBroadcastService.msalSubject$.pipe(
@@ -81,6 +81,7 @@ export class App implements OnInit, OnDestroy {
       .subscribe(() => {
         this.setLoginDisplay();
       });
+    //endregion
   }
 
   setLoginDisplay() {
