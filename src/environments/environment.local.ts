@@ -4,6 +4,6 @@ export const environment = {
   tenantId:'aafea113-8a60-476f-97e1-f518d6cd5db0',
   authority: 'https://login.microsoftonline.com/aafea113-8a60-476f-97e1-f518d6cd5db0',
   redirectUri: 'http://localhost:4200/',
-  apiUrl: 'http://localhost:8080',
+  apiUrl: 'https://msal-angular-sample-webservice.onrender.com',
 
 };
