@@ -54,12 +54,6 @@ export const appConfig: ApplicationConfig = {
     ),
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor, // MsalInterceptor blijft via DI / HTTP_INTERCEPTORS werken
-      multi: true
-    },
-    provideHttpClient(withInterceptorsFromDi()),
-    {
-      provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
       multi: true
     },
