@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { SpinnerService } from '../spinners/spinner-service';
+import {SpinnerService} from '../spinners/spinner-service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +10,10 @@ export class AjaxBusyService {
   private readonly spinner = inject(SpinnerService);
 
   private readonly requestCounter: number = 0;
-  
+
   // Tweak as needed
-  private readonly showDelayMs = 150; 
-  private readonly minVisibleMs = 300; 
+  private readonly showDelayMs = 150;
+  private readonly minVisibleMs = 300;
 
   private readonly showTimerId: any = null;
   private readonly shownAt: number | null = null;
