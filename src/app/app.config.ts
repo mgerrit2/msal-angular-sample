@@ -77,7 +77,7 @@ export const appConfig: ApplicationConfig = {
       useValue: {
         interactionType: InteractionType.Redirect,
         protectedResourceMap: new Map([
-          [environment.apiUrl, ['api://3b2948af-005e-461a-bcfe-3024f8239c32/access_as_user']]
+          [environment.apiUrl, [environment.scopes]]
         ])
       }
     },

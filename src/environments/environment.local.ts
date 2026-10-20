@@ -5,5 +5,6 @@ export const environment = {
   authority: 'https://login.microsoftonline.com/aafea113-8a60-476f-97e1-f518d6cd5db0',
   redirectUri: 'http://localhost:4200/',
   apiUrl: 'https://msal-angular-sample-webservice.onrender.com',
+  scopes: 'api://3b2948af-005e-461a-bcfe-3024f8239c32/access_as_user'
 
 };

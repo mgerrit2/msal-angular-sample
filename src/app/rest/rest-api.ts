@@ -10,7 +10,7 @@ import {environment} from '../../environments/environment';
 export class RestApi {
 
   private endpoint = '/protected';
-  private scopes = ['api://3b2948af-005e-461a-bcfe-3024f8239c32/access_as_user'];
+  private scopes = [environment.scopes];
 
   constructor(
     private http: HttpClient,
