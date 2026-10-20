@@ -6,6 +6,7 @@
 - implementing
 
 ## OAuth 2.0 en OpenID Connect (OIDC). implementation
+
 #### app.config.ts
 ```typescript
 import {
@@ -98,7 +99,6 @@ export const appConfig: ApplicationConfig = {
     MsalBroadcastService
   ]
 };
-
 ```
 
 #### App
@@ -238,6 +238,54 @@ export class App implements OnInit, OnDestroy {
 }
 
 ```
+
+#### app.html
+
+``` typescript
+<div class="card">
+  <!-- PrimeNG Menubar -->
+  <p-menubar [model]="items">
+    <ng-template pTemplate="end">
+      <div class="flex align-items-center gap-2">
+        <!-- Toon Inloggen knop als de gebruiker NIET is ingelogd -->
+        @if (!loginDisplay) {
+          <p-button
+            label="Inloggen"
+            icon="pi pi-sign-in"
+            severity="success"
+            (click)="login()"
+            (keydown.enter)="login()"
+          >
+          </p-button>
+        }
+
+        <!-- Toon Uitloggen knop als de gebruiker WEL is ingelogd -->
+        @if (loginDisplay) {
+          <p-button
+            label="Uitloggen"
+            icon="pi pi-sign-out"
+            severity="danger"
+            (click)="logout()"
+            (keydown.enter)="logout()"
+            >
+          </p-button>
+        }
+      </div>
+    </ng-template>
+  </p-menubar>
+</div>
+<main class="content">
+  <router-outlet />
+  <app-spinner></app-spinner> <!-- the ajax spinner component -->
+</main>
+
+```
+
+#### rest-api
+``` typescript
+
+```
+
 
 ## Ajax implementation
 ### Purpose
