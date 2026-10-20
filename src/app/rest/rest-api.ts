@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {inject,Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, from, switchMap, catchError, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
@@ -22,15 +22,8 @@ export class RestApi {
     ? environment.scopes
     : [environment.scopes];
 
-  /**
-   * @constructor
-   * @param http - Angular HttpClient voor het uitvoeren van HTTP-verzoeken
-   * @param msalService - MSAL service voor authenticatie en token-beheer
-   */
-  constructor(
-    private http: HttpClient,
-    private msalService: MsalService
-  ) {}
+  private readonly http = inject(HttpClient)
+  private readonly msalService = inject(MsalService)
 
   /**
    * Haalt beveiligde data op van de backend API.
