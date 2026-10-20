@@ -26,7 +26,8 @@ import {
   MsalBroadcastService, MsalModule, MsalInterceptor
 } from '@azure/msal-angular';
 import { msalConfig } from './auth-config';
-import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http'; // Pointing to the config file you created earlier
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {environment} from '../environments/environment'; // Pointing to the config file you created earlier
 
 // 1. Initialize the MSAL Instance
 export function MSALInstanceFactory(): PublicClientApplication {
@@ -81,7 +82,7 @@ export const appConfig: ApplicationConfig = {
       useValue: {
         interactionType: InteractionType.Redirect,
         protectedResourceMap: new Map([
-          ['http://localhost:8080/api/', ['api://3b2948af-005e-461a-bcfe-3024f8239c32/access_as_user']]
+          [environment.apiUrl, ['api://3b2948af-005e-461a-bcfe-3024f8239c32/access_as_user']]
         ])
       }
     },
