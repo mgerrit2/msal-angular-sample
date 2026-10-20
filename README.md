@@ -10,7 +10,7 @@
 ### Purpose
 To show spinner with slow rest api call
 
-#### The interceptor implementation
+#### The interceptor implementation(ajax-busy-interceptor.ts)
 ``` java
 import { inject } from '@angular/core';
 import { HttpInterceptorFn } from '@angular/common/http';
@@ -33,7 +33,7 @@ export const ajaxBusyInterceptor: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-#### The spinner service implementation
+#### The spinner service implementation(spinner-service.ts)
 ``` java
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable} from 'rxjs';
@@ -65,7 +65,7 @@ export class SpinnerService {
 }
 ```
 
-#### ApplicationConfig
+#### ApplicationConfig(app.config.ts)
 ``` java
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -110,4 +110,12 @@ export const appConfig: ApplicationConfig = {
   ]
 };
 
+```
+#### Declaration of the spinner(app.html)
+``` html 
+
+<main class="content">
+  <router-outlet />
+  <app-spinner></app-spinner> <!-- the ajax spinner component -->
+</main>
 ```

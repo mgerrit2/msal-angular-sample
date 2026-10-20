@@ -27,7 +27,9 @@
           label="Inloggen"
           icon="pi pi-sign-in"
           severity="success"
-          (click)="login()">
+          (click)="login()"
+          (keydown.enter)="login()">
+        >
         </p-button>
 
         <!-- Toon Uitloggen knop als de gebruiker WEL is ingelogd -->
@@ -36,7 +38,9 @@
           label="Uitloggen"
           icon="pi pi-sign-out"
           severity="danger"
-          (click)="logout()">
+          (click)="logout()"
+          (keydown.enter)="logout()">
+        >
         </p-button>
       </div>
     </ng-template>
@@ -44,5 +48,5 @@
 </div>
 <main class="content">
   <router-outlet />
-  <app-spinner></app-spinner>
+  <app-spinner></app-spinner> <!-- the ajax spinner component -->
 </main>
