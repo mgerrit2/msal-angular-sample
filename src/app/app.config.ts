@@ -29,7 +29,7 @@ export function MSALInstanceFactory(): PublicClientApplication {
   return new PublicClientApplication({
     auth: {
       clientId: environment.clientId,
-      authority: 'https://login.microsoftonline.com/$(environment.clientId)',
+      authority: environment.authority,
       redirectUri: environment.redirectUri
     }
   });
