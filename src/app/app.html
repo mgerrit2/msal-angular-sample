@@ -22,26 +22,28 @@
     <ng-template pTemplate="end">
       <div class="flex align-items-center gap-2">
         <!-- Toon Inloggen knop als de gebruiker NIET is ingelogd -->
-        <p-button
-          *ngIf="!loginDisplay"
-          label="Inloggen"
-          icon="pi pi-sign-in"
-          severity="success"
-          (click)="login()"
-          (keydown.enter)="login()">
-        >
-        </p-button>
+        @if (!loginDisplay) {
+          <p-button
+            label="Inloggen"
+            icon="pi pi-sign-in"
+            severity="success"
+            (click)="login()"
+            (keydown.enter)="login()"
+          >
+          </p-button>
+        }
 
         <!-- Toon Uitloggen knop als de gebruiker WEL is ingelogd -->
-        <p-button
-          *ngIf="loginDisplay"
-          label="Uitloggen"
-          icon="pi pi-sign-out"
-          severity="danger"
-          (click)="logout()"
-          (keydown.enter)="logout()">
-        >
-        </p-button>
+        @if (loginDisplay) {
+          <p-button
+            label="Uitloggen"
+            icon="pi pi-sign-out"
+            severity="danger"
+            (click)="logout()"
+            (keydown.enter)="logout()"
+            >
+          </p-button>
+        }
       </div>
     </ng-template>
   </p-menubar>
