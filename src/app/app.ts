@@ -1,5 +1,5 @@
 import {Component, OnInit, signal,OnDestroy} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import {firstValueFrom, Subject} from 'rxjs';
@@ -8,6 +8,7 @@ import { EventMessage, EventType, InteractionStatus } from '@azure/msal-browser'
 import { filter, takeUntil } from 'rxjs/operators';
 import {ButtonModule} from 'primeng/button';
 import {CommonModule} from '@angular/common';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +32,8 @@ export class App implements OnInit, OnDestroy {
 
   constructor(
     private authService: MsalService,
-    private msalBroadcastService: MsalBroadcastService
+    private msalBroadcastService: MsalBroadcastService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -50,6 +52,11 @@ export class App implements OnInit, OnDestroy {
           console.error('Fout bij verwerken redirect:', error);
         }
       });
+
+    // Eventueel URL opschonen als er nog query params (zoals ?state) in staan na redirect/logout
+    if (window.location.search || window.location.hash.includes('state=')) {
+      await this.router.navigate([], { replaceUrl: true });
+    }
 
     //region Menu instellingen configureren
     this.items = [
@@ -109,7 +116,9 @@ export class App implements OnInit, OnDestroy {
    * Logt de gebruiker uit via een MSAL redirect.
    */
   logout() {
-    this.authService.logoutRedirect();
+    this.authService.logoutRedirect({
+      postLogoutRedirectUri: environment.redirectUri // Stuurt de gebruiker terug naar jouw frontend URL!
+    });
   }
 
   /**
