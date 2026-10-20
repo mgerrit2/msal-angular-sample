@@ -2,7 +2,7 @@ import {Component, OnInit, signal,OnDestroy} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
-import {Subject} from 'rxjs';
+import {firstValueFrom, Subject} from 'rxjs';
 import {MsalBroadcastService, MsalService} from '@azure/msal-angular';
 import { EventMessage, EventType, InteractionStatus } from '@azure/msal-browser';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -29,6 +29,7 @@ export class App implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
+
     // 1. CRUCIAAL: Vang de redirect/code op van Microsoft en ruim de URL op!
     this.authService.handleRedirectObservable()
       .pipe(takeUntil(this._destroying$))
@@ -44,6 +45,7 @@ export class App implements OnInit, OnDestroy {
         }
       });
 
+    //region menu settings
     this.items = [
       {
         label: 'profile',
@@ -56,22 +58,20 @@ export class App implements OnInit, OnDestroy {
         routerLink: ['/app-api-call-component']
       }
     ]
-
-
-    // Direct de login-status instellen na het verwerken
-    this.setLoginDisplay();
+    //endregion
 
     // Listen for successful login events
-    this.msalBroadcastService.msalSubject$
-      .pipe(
-        filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS),
-        takeUntil(this._destroying$)
-      )
-      .toPromise()
-      .then(() => {
-
-        this.setLoginDisplay();
-      });
+    try {
+      await firstValueFrom(
+        this.msalBroadcastService.msalSubject$.pipe(
+          filter((msg: EventMessage) => msg.eventType === EventType.LOGIN_SUCCESS),
+          takeUntil(this._destroying$)
+        )
+      );
+      this.setLoginDisplay();
+    } catch(e) {
+      console.log(e)
+    }
 
     this.msalBroadcastService.inProgress$
       .pipe(
