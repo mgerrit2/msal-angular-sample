@@ -1,5 +1,3 @@
-// src/app/interceptors/ajax-busy.interceptor.ts
-
 import { inject } from '@angular/core';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
