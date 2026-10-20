@@ -25,7 +25,6 @@ import {
   MsalGuard,
   MsalBroadcastService, MsalModule, MsalInterceptor
 } from '@azure/msal-angular';
-import { msalConfig } from './auth-config';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {environment} from '../environments/environment'; // Pointing to the config file you created earlier
 
@@ -33,9 +32,9 @@ import {environment} from '../environments/environment'; // Pointing to the conf
 export function MSALInstanceFactory(): PublicClientApplication {
   return new PublicClientApplication({
     auth: {
-      clientId: '1d2796fb-6f52-4590-b6be-c22dbba8e30a',
-      authority: 'https://login.microsoftonline.com/aafea113-8a60-476f-97e1-f518d6cd5db0',
-      redirectUri: 'http://localhost:4200'
+      clientId: environment.clientId,
+      authority: 'https://login.microsoftonline.com/$(environment.clientId)',
+      redirectUri: environment.redirectUri
     }
   });
 }
