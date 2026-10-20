@@ -8,7 +8,8 @@
 
 ## Ajax implementation
 ### Purpose
-To show spinner with slow rest api call
+To show spinner with slow rest api call, to let the user now.
+That the api has some startup or latensie problems
 
 #### The interceptor implementation(ajax-busy-interceptor.ts)
 ``` java
