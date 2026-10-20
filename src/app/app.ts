@@ -16,11 +16,17 @@ import {CommonModule} from '@angular/common';
   styleUrl: './app.css'
 })
 export class App implements OnInit, OnDestroy {
+
+  /** Titel van de applicatie */
   protected readonly title = signal('Angular Entra ID Auth');
 
+  /** Items voor de PrimeNG menubar */
   items: MenuItem[] | undefined;
 
+  /** Geeft aan of de gebruiker is ingelogd */
   loginDisplay = false;
+
+  /** Subject om actieve subscriptions te stoppen bij vernietiging van de component (memory leak prevention) */
   private readonly _destroying$ = new Subject<void>();
 
   constructor(
@@ -45,7 +51,7 @@ export class App implements OnInit, OnDestroy {
         }
       });
 
-    //region menu settings
+    //region Menu instellingen configureren
     this.items = [
       {
         label: 'profile',
@@ -84,19 +90,31 @@ export class App implements OnInit, OnDestroy {
     //endregion
   }
 
+  /**
+   * Controleert of er actieve accounts bekend zijn en werkt de login-weergave bij.
+   */
   setLoginDisplay() {
     this.loginDisplay = this.authService.instance.getAllAccounts().length > 0;
   }
 
+  /**
+   * Start het inlogproces via een MSAL redirect.
+   */
   login() {
     // Triggers redirect login (or use loginPopup())
     this.authService.loginRedirect();
   }
 
+  /**
+   * Logt de gebruiker uit via een MSAL redirect.
+   */
   logout() {
     this.authService.logoutRedirect();
   }
 
+  /**
+   * Ruimt alle actieve subscriptions op om geheugenlekken te voorkomen.
+   */
   ngOnDestroy(): void {
     this._destroying$.next();
     this._destroying$.complete();
