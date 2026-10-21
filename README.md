@@ -1,5 +1,8 @@
 # Project for testing Azure entra-id
 
+## Overview of Architecture
+![Architecture-overview.jpg](images/Architecture-overview.jpg)
+
 
 ## Features
 - implementing ajax spinner
