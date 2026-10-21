@@ -286,6 +286,12 @@ export class App implements OnInit, OnDestroy {
 
 ```
 
+#### Azure forms
+![aure-overview.png](images/aure-overview.png)
+![Branding&properties .png](images/Branding%26properties%20.png)
+![Authentication(Preview).png](images/Authentication%28Preview%29.png)
+![API-permissions.png](images/API-permissions.png)
+![Expose-an-API.png](images/Expose-an-API.png)
 
 ## Ajax implementation
 ### Purpose
