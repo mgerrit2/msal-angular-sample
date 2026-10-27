@@ -23,8 +23,8 @@ COPY --from=build /app/dist/msal-angular-sample/browser/. /usr/share/nginx/html/
 # Kopieer je aangepaste nginx configuratie
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 10000
 
 
-
+CMD ["nginx", "-g", "daemon off;"]
 
