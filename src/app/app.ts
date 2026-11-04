@@ -62,7 +62,7 @@ export class App implements OnInit, OnDestroy {
     //region Menu instellingen configureren
     this.items = [
       {
-        label: 'profile',
+        label: 'Profile',
         icon: 'pi pi-home',
         routerLink: ['/profile']
       },
