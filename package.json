@@ -5,6 +5,7 @@
     "ng": "ng",
     "startlocal": "ng serve --configuration local",
     "build": "ng build --configuration development",
+    "render": "ng serve --configuration development",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -20,6 +21,7 @@
       }
     ]
   },
+  "keywords": [],
   "private": true,
   "dependencies": {
     "@angular/animations": "^21.2.0",
