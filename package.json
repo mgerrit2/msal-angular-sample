@@ -37,6 +37,7 @@
     "@primeng/themes": "^21.0.4",
     "@primeuix/themes": "^3.0.1",
     "bootstrap": "^5.3.8",
+    "primeicons": "^8.0.2",
     "primeng": "^21.1.10",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

@@ -2,10 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {MsalService} from '@azure/msal-angular';
 import {CommonModule} from '@angular/common';
 import { AccountInfo } from '@azure/msal-browser';
+import {Accordion, AccordionContent, AccordionHeader, AccordionPanel} from 'primeng/accordion';
 
 @Component({
   selector: 'app-profile-component',
-  imports: [CommonModule],
+  imports: [CommonModule, Accordion, AccordionContent, AccordionHeader, AccordionPanel],
   templateUrl: './profile-component.html',
   styleUrl: './profile-component.css',
 })

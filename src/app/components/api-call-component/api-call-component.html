@@ -1,87 +1,93 @@
-<p>api-call-component works!</p>
+<div class="container-fluid mx-auto px-4 py-6 max-w-md">
+  <h3>Show API call to resource server</h3>
 
-<form [formGroup]="form" >
+  <form [formGroup]="form" >
 
-<p-button label="Call api"
-          icon="pi pi-check"
-          (onClick)="callApi()"
-> </p-button>
-<input
-  type="text"
-  pInputText
-  formControlName="apiResponseData"
-  placeholder="API response will appear here..."
-  readonly
-  style="width: 100%;"
-/>
+    <div class="row">
+      <p-button label="Call api"
+                icon="pi pi-check"
+                (onClick)="callApi()"
+      > </p-button>
+      <input
+        type="text"
+        pInputText
+        formControlName="apiResponseData"
+        placeholder="API response will appear here..."
+        readonly
+        style="width: 100%;"
+      />
 
-
-  <div class="row my-3">
-    <div class="col-12 col-md-8 col-lg-6">
-      <p-accordion>
-        <p-accordion-panel value="1">
-          <p-accordion-header>
-            <div class="d-flex align-items-center gap-2">
-              <i class="pi pi-cog text-primary fs-5"></i>
-              <span class="fw-bold fs-6">Specifications</span>
-            </div>
-          </p-accordion-header>
-
-          <p-accordion-content>
-            <!-- Purpose Section -->
-            <div class="mb-4">
-              <h6 class="fw-bold text-secondary d-flex align-items-center gap-2 mb-2">
-                <i class="pi pi-bullseye text-primary"></i> Purpose
-              </h6>
-              <p class="text-body-secondary small mb-0 ps-4">
-                Demonstrate the windows authentication with Azure.
-                There will be a bearer token created and send from the frontend to the backend.
-                The backend is setup as resource server
-              </p>
-            </div>
-
-            <div class="mb-4">
-              <h6 class="fw-bold text-secondary d-flex align-items-center gap-2 mb-2">
-                <i class="pi pi-bullseye text-primary"></i> Server platform
-              </h6>
-              <p class="text-body-secondary small mb-0 ps-4">
-                The server platform is Render, and the backend may need 50 seconds to start up.
-              </p>
-            </div>
-
-            <hr class="text-border my-3" />
-
-            <!-- Technology Stack Section -->
-            <div>
-              <h6 class="fw-bold text-secondary d-flex align-items-center gap-2 mb-3">
-                <i class="pi pi-layers text-primary"></i> Technology Stack
-              </h6>
-
-              <ul class="list-group list-group-flush">
-                <!-- Backend -->
-                <li class="list-group-item d-flex align-items-center justify-content-between px-0 py-2 border-0">
-                <span class="text-muted small d-flex align-items-center gap-2">
-                  <i class="pi pi-server text-secondary"></i> Backend
-                </span>
-                  <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1">
-                  Spingboot 4 running on java 25
-                </span>
-                </li>
-
-                <!-- Frontend -->
-                <li class="list-group-item d-flex align-items-center justify-content-between px-0 py-2 border-0">
-                <span class="text-muted small d-flex align-items-center gap-2">
-                  <i class="pi pi-desktop text-secondary"></i> Frontend
-                </span>
-                  <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1">
-                  Angular
-                </span>
-                </li>
-              </ul>
-            </div>
-          </p-accordion-content>
-        </p-accordion-panel>
-      </p-accordion>
     </div>
-  </div>
-</form>
+
+    <!-- FIXED BOTTOM SECTION -->
+    <div class="row bg-white p-3 shadow-lg" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 1030;">
+      <div class="col-12 col-md-8 col-lg-6 mx-auto">
+        <p-accordion>
+          <p-accordion-panel value="1">
+            <p-accordion-header>
+              <div class="d-flex align-items-center gap-2">
+                <i class="pi pi-cog text-primary fs-5"></i>
+                <span class="fw-bold fs-6"><h3>Specifications</h3></span>
+              </div>
+            </p-accordion-header>
+
+            <p-accordion-content>
+              <!-- Purpose Section -->
+              <div class="mb-4">
+                <h4 class="fw-bold text-secondary d-flex align-items-center gap-2 mb-2">
+                  <i class="pi pi-bullseye text-primary"></i>Purpose
+                </h4>
+                <p class="text-body-secondary small mb-0 ps-4">
+                  Demonstrate the windows authentication with Azure.
+                  There will be a bearer token created and send from the frontend to the backend.
+                  The backend is setup as resource server
+                </p>
+              </div>
+
+              <div class="mb-4">
+                <h4 class="fw-bold text-secondary d-flex align-items-center gap-2 mb-2">
+                  <i class="pi pi-bullseye text-primary"></i> Server platform
+                </h4>
+                <p class="text-body-secondary small mb-0 ps-4">
+                  The server platform is Render, and the backend may need 50 seconds to start up.
+                </p>
+              </div>
+
+              <hr class="text-border my-3"/>
+
+              <!-- Technology Stack Section -->
+              <div>
+                <h6 class="fw-bold text-secondary d-flex align-items-center gap-2 mb-3">
+                  <i class="pi pi-layers text-primary"></i> Technology Stack
+                </h6>
+
+                <ul class="list-group list-group-flush">
+                  <!-- Backend -->
+                  <li class="list-group-item d-flex align-items-center justify-content-between px-0 py-2 border-0">
+                    <span class="text-muted small d-flex align-items-center gap-2">
+                      <i class="pi pi-server text-secondary"></i> Backend
+                    </span>
+                    <span
+                      class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1">
+                      Spingboot 4 running on java 25
+                    </span>
+                  </li>
+
+                  <!-- Frontend -->
+                  <li class="list-group-item d-flex align-items-center justify-content-between px-0 py-2 border-0">
+                    <span class="text-muted small d-flex align-items-center gap-2">
+                      <i class="pi pi-desktop text-secondary"></i> Frontend
+                    </span>
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1">
+                      Angular
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </p-accordion-content>
+          </p-accordion-panel>
+        </p-accordion>
+      </div>
+    </div>
+  </form>
+</div>
