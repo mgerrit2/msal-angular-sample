@@ -5,12 +5,19 @@ import {firstValueFrom} from 'rxjs';
 import {InputTextModule} from 'primeng/inputtext';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import {Accordion, AccordionContent, AccordionHeader, AccordionModule, AccordionPanel} from 'primeng/accordion';
 
 @Component({
   selector: 'app-api-call-component',
   imports: [CommonModule, FormsModule,
-    InputTextModule, ButtonModule,
-    ReactiveFormsModule
+    InputTextModule,
+    ButtonModule,
+    ReactiveFormsModule,
+    Accordion,
+    AccordionPanel,
+    AccordionHeader,
+    AccordionContent,
+    AccordionModule
   ],
   templateUrl: './api-call-component.html',
   styleUrl: './api-call-component.css',
