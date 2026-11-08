@@ -35,6 +35,7 @@ export class ApiCallComponent {
     apiResponseData: new FormControl(''),
   });
 
+
   async callApi(){
 
     try {

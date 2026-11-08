@@ -10,10 +10,22 @@ import {ButtonModule} from 'primeng/button';
 import {CommonModule} from '@angular/common';
 import {environment} from '../environments/environment';
 import {Spinner} from './components/spinner/spinner';
+import {TypeOfuser} from './type-ofuser';
+import {SelectModule} from 'primeng/select';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MenubarModule,CommonModule, ButtonModule, Spinner],
+  imports: [
+    RouterOutlet,
+    MenubarModule,
+    CommonModule,
+    ButtonModule,
+    Spinner,
+    SelectModule,
+    FormsModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -21,6 +33,18 @@ export class App implements OnInit, OnDestroy {
 
   /** Titel van de applicatie */
   protected readonly title = signal('Angular Entra ID Auth');
+
+  typeOfUsers!: TypeOfuser[];
+
+  form  = new FormGroup({
+    typeOfUsers: new FormControl<TypeOfuser | null>(null),
+  });
+
+  //region getters for formcontrol
+  get getTypeOfUsers(): FormControl {
+    // We cast it to FormControl to easily access its value property later
+    return this.form.get('typeOfUsers') as FormControl;
+  }
 
   /** Items voor de PrimeNG menubar */
   items: MenuItem[] | undefined;
@@ -38,6 +62,18 @@ export class App implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
+
+    this.typeOfUsers = [
+      { name: 'EntraID', code: '1' },
+      { name: 'Jon Doe', code: '2' },
+    ];
+
+    // Now it is 100% safe to set the default value to position 0 (the second item)
+    if (this.typeOfUsers.length > 1) {
+      this.form.patchValue({
+        typeOfUsers: this.typeOfUsers[0]
+      });
+    }
 
     // 1. CRUCIAAL: Vang de redirect/code op van Microsoft en ruim de URL op!
     this.authService.handleRedirectObservable()
@@ -109,17 +145,33 @@ export class App implements OnInit, OnDestroy {
    * Start het inlogproces via een MSAL redirect.
    */
   login() {
-    // Triggers redirect login (or use loginPopup())
-    this.authService.loginRedirect();
-  }
+
+    if (this.getTypeOfUsers.value.code === "1" ) {
+      // Triggers redirect login (or use loginPopup())
+      this.authService.loginRedirect();
+    } else if(this.getTypeOfUsers.value.code === "2") {
+      this.loginDisplay = true;
+      localStorage.setItem('custom_token','eyJ0eXAiOiJKV1QiLCJraWQiOiI3L05BZHJaekFjN2wiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJvYXV0aCIsImF6cCI6IjZyTDRaWkhPS2VIWiIsImF6cGFjciI6ImZyT0Y2QVBoNFphUCIsIm5hbWUiOiJKb24gRG9lIiwib2lkIjoiNzE0YzY0ZDItMzA5YS00YmRjLTg2ODUtYzUzMTNjY2YwYWUyIiwicmgiOiIwLkFRQUJBUWpFNzB2OHZRKzEyMzQiLCJ0aWQiOiIwLkFRQUJBUWpFNzB2OHZRKzEyMzQiLCJ2ZXIiOiIxLjAiLCJ4bXNfZnRkIjoiRlRELVhNUy1FVVItMjAyNjExLTAwMDEiLCJzdWIiOiJqb25kb2UiLCJhdWQiOiJrVVovL08xck9wZXQiLCJpYXQiOjE3OTQxNTQ5OTIsImV4cCI6MTc5NDI0MTM5Mn0.SrqxEKhGhD8IQ2gKcs3v3B4FeMNOnIb3d4vfmbPIA9k');
+    }
+
+   }
 
   /**
    * Logt de gebruiker uit via een MSAL redirect.
    */
   logout() {
-    this.authService.logoutRedirect({
-      postLogoutRedirectUri: environment.redirectUri // Stuurt de gebruiker terug naar jouw frontend URL!
-    });
+
+    if (this.getTypeOfUsers.value.code === "1" ) {
+      this.authService.logoutRedirect({
+        postLogoutRedirectUri: environment.redirectUri // Stuurt de gebruiker terug naar jouw frontend URL!
+      });
+    } else if(this.getTypeOfUsers.value.code === "2") {
+      this.loginDisplay = false;
+      localStorage.setItem('custom_token','');
+    }
+
+
+    //localStorage.setItem('custom_token','');
   }
 
   /**

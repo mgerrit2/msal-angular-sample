@@ -2,6 +2,13 @@
   <!-- PrimeNG Menubar -->
   <p-menubar [model]="items">
     <ng-template pTemplate="end">
+      <form [formGroup]="form" >
+      <p-select [options]="typeOfUsers"
+                optionLabel="name"
+                formControlName="typeOfUsers"
+                placeholder="Select a user type"
+      />
+
       <div class="flex align-items-center gap-2">
         <!-- Toon Inloggen knop als de gebruiker NIET is ingelogd -->
         @if (!loginDisplay) {
@@ -27,6 +34,7 @@
           </p-button>
         }
       </div>
+      </form>
     </ng-template>
   </p-menubar>
 </div>
