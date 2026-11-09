@@ -1,4 +1,4 @@
-import {Component, OnInit, signal,OnDestroy} from '@angular/core';
+import {Component, OnInit, signal, OnDestroy, Inject} from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
@@ -11,8 +11,9 @@ import {CommonModule} from '@angular/common';
 import {environment} from '../environments/environment';
 import {Spinner} from './components/spinner/spinner';
 import {TypeOfuser} from './type-ofuser';
-import {SelectModule} from 'primeng/select';
+import {SelectChangeEvent, SelectModule} from 'primeng/select';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {InputText} from 'primeng/inputtext';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,8 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular
     Spinner,
     SelectModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputText
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
@@ -35,11 +37,13 @@ export class App implements OnInit, OnDestroy {
   protected readonly title = signal('Angular Entra ID Auth');
 
   typeOfUsersHidden = false;
+  jwttokenHidden = false;
 
   typeOfUsers!: TypeOfuser[];
 
   form  = new FormGroup({
     typeOfUsers: new FormControl<TypeOfuser | null>(null),
+    jwtToken: new FormControl<TypeOfuser | null>(null)
   });
 
   //region getters for formcontrol
@@ -47,6 +51,12 @@ export class App implements OnInit, OnDestroy {
     // We cast it to FormControl to easily access its value property later
     return this.form.get('typeOfUsers') as FormControl;
   }
+
+  get getJwtToken(): FormControl {
+    // We cast it to FormControl to easily access its value property later
+    return this.form.get('jwtToken') as FormControl;
+  }
+
 
   /** Items voor de PrimeNG menubar */
   items: MenuItem[] | undefined;
@@ -57,21 +67,22 @@ export class App implements OnInit, OnDestroy {
   /** Subject om actieve subscriptions te stoppen bij vernietiging van de component (memory leak prevention) */
   private readonly _destroying$ = new Subject<void>();
 
-  constructor(
-    private authService: MsalService,
-    private msalBroadcastService: MsalBroadcastService,
-    private router: Router
-  ) {}
+  private readonly authService = Inject(MsalService);
+  private readonly msalBroadcastService= Inject(MsalBroadcastService);
+  private readonly router = Inject(Router);
+
+  constructor() {}
 
   async ngOnInit() {
 
     if(environment.debug){
       this.typeOfUsersHidden = true;
+      this.jwttokenHidden= false;
     }
 
     this.typeOfUsers = [
       { name: 'EntraID', code: '1' },
-      { name: 'Jon Doe', code: '2' },
+      { name: 'custom JWT', code: '2' },
     ];
 
     // Now it is 100% safe to set the default value to position 0 (the second item)
@@ -157,7 +168,7 @@ export class App implements OnInit, OnDestroy {
       this.authService.loginRedirect();
     } else if(this.getTypeOfUsers.value.code === "2") {
       this.loginDisplay = true;
-      localStorage.setItem('custom_token','eyJ0eXAiOiJKV1QiLCJraWQiOiI3L05BZHJaekFjN2wiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJvYXV0aCIsImF6cCI6IjZyTDRaWkhPS2VIWiIsImF6cGFjciI6ImZyT0Y2QVBoNFphUCIsIm5hbWUiOiJKb24gRG9lIiwib2lkIjoiNzE0YzY0ZDItMzA5YS00YmRjLTg2ODUtYzUzMTNjY2YwYWUyIiwicmgiOiIwLkFRQUJBUWpFNzB2OHZRKzEyMzQiLCJ0aWQiOiIwLkFRQUJBUWpFNzB2OHZRKzEyMzQiLCJ2ZXIiOiIxLjAiLCJ4bXNfZnRkIjoiRlRELVhNUy1FVVItMjAyNjExLTAwMDEiLCJzdWIiOiJqb25kb2UiLCJhdWQiOiJrVVovL08xck9wZXQiLCJpYXQiOjE3OTQxNTQ5OTIsImV4cCI6MTc5NDI0MTM5Mn0.SrqxEKhGhD8IQ2gKcs3v3B4FeMNOnIb3d4vfmbPIA9k');
+      localStorage.setItem('custom_token',this.getJwtToken.value);
     }
 
    }
@@ -187,5 +198,17 @@ export class App implements OnInit, OnDestroy {
     this._destroying$.next();
     this._destroying$.complete();
   }
+
+
+  typeOfUsersChange(event:SelectChangeEvent) :void{
+
+    if(event?.value?.code === '1'){
+      this.jwttokenHidden=false;
+    } else {
+      this.jwttokenHidden = true;
+    }
+  }
+
+
 
 }

@@ -5,11 +5,36 @@
       <form [formGroup]="form" style="display: flex; flex-direction: row; align-items: center; gap: 8px; margin: 0;">
           <!-- User Type Dropdown Column -->
         @if(typeOfUsersHidden){
+          @if(jwttokenHidden){
+            <div class="flex-grow-1" style="display: flex; align-items: center; gap: 8px; min-width: 800px;">
+              <span class="w-full" style="display: block; flex-grow: 1;">
+                <input
+                  type="text"
+                  pInputText
+                  formControlName="jwtToken"
+                  placeholder="JWT token user"
+                  class="w-full"
+                  style="width: 100%"
+                />
+
+              </span>
+              <p-button
+                icon="pi pi-times"
+                severity="secondary"
+                [text]="true"
+                pTooltip="Clear token"
+                (click)="form.get('jwtToken')?.setValue('')"
+                (keydown.enter)="form.get('jwtToken')?.setValue('')"
+              />
+
+            </div>
+          }
           <div class="flex-shrink-0">
             <p-select [options]="typeOfUsers"
                       optionLabel="name"
                       formControlName="typeOfUsers"
                       placeholder="Select a user type"
+                      (onChange)="typeOfUsersChange($event)"
             />
           </div>
         }
