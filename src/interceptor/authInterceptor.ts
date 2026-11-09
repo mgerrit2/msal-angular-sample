@@ -8,21 +8,18 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   console.log('authInterceptor hit');
 
-  // 1. If the request is for a specific custom service, use a custom token
-  //if (req.url.includes('/api/custom-service')) {
-  const customToken = localStorage.getItem('custom_token');
-  if(customToken) {
-
+  if(environment.debug){
+    const customToken = localStorage.getItem('custom_token');
     if (customToken) {
-      const clonedReq = req.clone({
-        setHeaders: {Authorization: `Bearer ${customToken}`}
-      });
-      return next(clonedReq);
+
+      if (customToken) {
+        const clonedReq = req.clone({
+          setHeaders: {Authorization: `Bearer ${customToken}`}
+        });
+        return next(clonedReq);
+      }
     }
   }
-
-
-  //}
 
 
 

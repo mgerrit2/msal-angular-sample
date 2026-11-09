@@ -34,6 +34,8 @@ export class App implements OnInit, OnDestroy {
   /** Titel van de applicatie */
   protected readonly title = signal('Angular Entra ID Auth');
 
+  typeOfUsersHidden = false;
+
   typeOfUsers!: TypeOfuser[];
 
   form  = new FormGroup({
@@ -62,6 +64,10 @@ export class App implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
+
+    if(environment.debug){
+      this.typeOfUsersHidden = true;
+    }
 
     this.typeOfUsers = [
       { name: 'EntraID', code: '1' },
