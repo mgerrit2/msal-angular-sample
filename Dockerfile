@@ -9,7 +9,7 @@ RUN npm install
 # Kopieer de rest van de code en bouw de app
 COPY . .
 # FIX: Voeg --base-href / toe zodat de scripts in de root worden gezocht
-RUN npm run build -- --configuration development --base-href /
+RUN npm run build -- --configuration production --base-href /
 
 # Stage 2: Serve de app met Nginx
 FROM nginx:alpine
