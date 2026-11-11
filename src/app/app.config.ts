@@ -19,7 +19,7 @@ import {
   MSAL_INTERCEPTOR_CONFIG,
   MsalService,
   MsalGuard,
-  MsalBroadcastService, MsalModule, MsalInterceptor
+  MsalBroadcastService,MsalInterceptor
 } from '@azure/msal-angular';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi} from '@angular/common/http';
 import {environment} from '../environments/environment';
