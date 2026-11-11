@@ -1,8 +1,9 @@
 import {inject,Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, from, switchMap, catchError, throwError} from 'rxjs';
 import {MsalService} from '@azure/msal-angular';
 import {environment} from '../../environments/environment';
+import {JwtTokenResponseDto} from '../dto/JwtTokenResponseDto';
 
 /**
  * Service voor het communiceren met de beveiligde Spring Boot backend API.
@@ -66,5 +67,11 @@ export class RestApi {
         return this.http.get(`${environment.apiUrl}/api/protected`, { headers, responseType: 'text' });
       })
     );
+  }
+
+  getJwtInfo(jwtToken: string): Observable<JwtTokenResponseDto> {
+    const params = new HttpParams().set('Authorization', jwtToken);
+
+    return this.http.get<JwtTokenResponseDto>(`${environment.apiUrl}/api/raw-token`, { params });
   }
 }

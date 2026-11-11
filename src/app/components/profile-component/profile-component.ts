@@ -1,8 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {MsalService} from '@azure/msal-angular';
 import {CommonModule} from '@angular/common';
 import { AccountInfo } from '@azure/msal-browser';
 import {Accordion, AccordionContent, AccordionHeader, AccordionPanel} from 'primeng/accordion';
+import {App} from '../../app';
+import {RestApi} from '../../rest/rest-api';
+import {firstValueFrom} from 'rxjs';
+import {mapTokenToAccountInfo} from '../../mappings/MapTokenToAccountInfo';
 
 @Component({
   selector: 'app-profile-component',
@@ -14,15 +18,36 @@ export class ProfileComponent implements OnInit {
   profileData?: AccountInfo;
   idTokenClaims: any;
 
+  private app = inject(App);
+  private jwtTokenService = inject(RestApi);
+
   constructor(private authService: MsalService) {}
 
-  ngOnInit(): void {
-    // Haal het actieve account op uit de MSAL instantie
-    this.profileData = this.authService.instance.getActiveAccount() || undefined;
+  async ngOnInit(): Promise<void> {
 
-    // 2. Extract specific claims if available
-    if (this.profileData) {
-      this.idTokenClaims = this.profileData.idTokenClaims;
+    if(this.app?.typeOfAuthentication()?.code === '1'){
+      this.profileData = this.authService.instance.getActiveAccount() || undefined;
+
+      // 2. Extract specific claims if available
+      if (this.profileData) {
+        this.idTokenClaims = this.profileData.idTokenClaims;
+      }
+    } else {
+
+      try {
+
+        let jwt = await firstValueFrom(this.jwtTokenService.getJwtInfo(this.app.typeOfAuthentication().jwtString));
+
+        this.profileData = mapTokenToAccountInfo(jwt)
+
+        console.log(jwt);
+      } catch (e) {
+        console.error(e);
+      }
+
     }
+
+    // Haal het actieve account op uit de MSAL instantie
+
   }
 }
