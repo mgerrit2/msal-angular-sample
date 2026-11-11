@@ -15,6 +15,7 @@ export class AjaxBusyService {
   private readonly showDelayMs = 150;
   private readonly minVisibleMs = 300;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private readonly showTimerId: any = null;
   private readonly shownAt: number | null = null;
 

@@ -12,11 +12,9 @@ export class SpinnerService {
   // Public Observable for consumption
   public spinnerObservable: Observable<boolean> = this.spinnerSubject.asObservable();
 
-  constructor() { }
-
   show(): void {
     console.log('SpinnerService: SETTING TRUE (Emitted)');
-    this.spinnerSubject.next(true); 
+    this.spinnerSubject.next(true);
   }
 
   hide(): void {

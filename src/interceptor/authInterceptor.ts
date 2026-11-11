@@ -3,7 +3,6 @@ import { inject } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { from, switchMap } from 'rxjs';
 import { environment } from '../environments/environment';
-import {App} from '../app/app';
 import {AuthTypeService} from '../services/shared/auth-type.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {

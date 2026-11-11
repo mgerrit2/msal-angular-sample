@@ -14,6 +14,7 @@ export function mapTokenToAccountInfo(tokenResponse: JwtTokenResponseDto, rawTok
     localAccountId: subject,
     name: tokenResponse['name'] || '',
     idToken: rawToken || '', // Pass the raw JWT string if you have it
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     idTokenClaims: tokenResponse as any,
   };
 }
