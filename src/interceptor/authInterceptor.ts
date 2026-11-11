@@ -3,27 +3,32 @@ import { inject } from '@angular/core';
 import { MsalService } from '@azure/msal-angular';
 import { from, switchMap } from 'rxjs';
 import { environment } from '../environments/environment';
+import {App} from '../app/app';
+import {AuthTypeService} from '../services/shared/auth-type.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
-  console.log('authInterceptor hit');
+  const authTypeService = inject(AuthTypeService);
 
-  if(environment.debug){
-    const customToken = localStorage.getItem('custom_token');
-    if (customToken) {
+  // 1. Custom Token Flow (Authentication code '2')
+  if (authTypeService.authType().code === '2') {
+    console.log('authInterceptor hit (Custom Token)');
 
+    if (environment.debug) {
+      const customToken = localStorage.getItem('custom_token');
       if (customToken) {
         const clonedReq = req.clone({
-          setHeaders: {Authorization: `Bearer ${customToken}`}
+          setHeaders: { Authorization: `Bearer ${customToken}` }
         });
         return next(clonedReq);
       }
     }
+
+    // Fallback if type is '2' but debug is false or customToken is missing
+    return next(req);
   }
 
-
-
-  // 2. Otherwise, fall back to standard MSAL Entra ID token logic
+  // 2. Standard MSAL Entra ID token logic
   const msalService = inject(MsalService);
   const account = msalService.instance.getActiveAccount();
 
@@ -31,9 +36,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-// FIXED: Access environment properties directly matching your environment configuration
   const tokenRequest = {
-    scopes: [environment.scopes], // Or environment.scopes if it's already an array
+    scopes: [environment.scopes],
     account: account
   };
 
@@ -47,4 +51,4 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       return next(authReq);
     })
   );
-};
+}
