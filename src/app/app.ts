@@ -1,4 +1,4 @@
-import {Component, OnInit, signal, OnDestroy, Inject, inject} from '@angular/core';
+import {Component, OnInit, signal, OnDestroy,inject} from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
@@ -15,6 +15,7 @@ import {SelectChangeEvent, SelectModule} from 'primeng/select';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
 import {AuthProfile} from './dto/auth-profile';
+import {AuthTypeService} from '../services/shared/auth-type.service';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +38,14 @@ export class App implements OnInit, OnDestroy {
   /** Titel van de applicatie */
   protected readonly title = signal('Angular Entra ID Auth');
 
+  // shared service
+  private authTypeServiceInterceptor = inject(AuthTypeService);
+
   private _typeOfAuthentication = signal<AuthProfile>({name:'EntraID',code:'1',jwtString:''});
+
+  //shared authservice
+  private authTypeService = inject(AuthTypeService);
+
   // Expose it as read-only to components
   typeOfAuthentication = this._typeOfAuthentication.asReadonly();
 
@@ -76,11 +84,8 @@ export class App implements OnInit, OnDestroy {
   private readonly msalBroadcastService= inject(MsalBroadcastService);
   private readonly router = inject(Router);
 
-  constructor() {}
 
   async ngOnInit() {
-
-
 
     if(environment.debug){
       this.typeOfUsersHidden = true;
@@ -171,9 +176,15 @@ export class App implements OnInit, OnDestroy {
   login() {
 
     if (this.getTypeOfUsers.value.code === "1" ) {
+
+      this.authTypeServiceInterceptor.authType.set({ name: 'EntraID', code: '1', jwtString: '' });
+
       // Triggers redirect login (or use loginPopup())
       this.authService.loginRedirect();
+
     } else if(this.getTypeOfUsers.value.code === "2") {
+
+      this.authTypeService.authType.set({ name: 'custom JWT', code: '2', jwtString: this.getJwtToken.value });
       this.loginDisplay = true;
       localStorage.setItem('custom_token',this.getJwtToken.value);
     }
@@ -186,6 +197,9 @@ export class App implements OnInit, OnDestroy {
   logout() {
 
     if (this.getTypeOfUsers.value.code === "1" ) {
+
+      // clear custom_token, other
+      localStorage.setItem('custom_token','');
       this.authService.logoutRedirect({
         postLogoutRedirectUri: environment.redirectUri // Stuurt de gebruiker terug naar jouw frontend URL!
       });
@@ -211,10 +225,11 @@ export class App implements OnInit, OnDestroy {
 
     if(event?.value?.code === '1'){
       this._typeOfAuthentication.set({name:'EntraID',code:'1',jwtString:''});
+
       this.jwttokenHidden=false;
     } else {
 
-     let customJWTToken = localStorage.getItem('custom_token');
+     const customJWTToken = localStorage.getItem('custom_token');
 
       if(customJWTToken !== '' ){
         this.getJwtToken.setValue(customJWTToken);
@@ -225,7 +240,7 @@ export class App implements OnInit, OnDestroy {
     }
   }
 
-  onJwtPaste(event: ClipboardEvent): void {
+  onJwtPaste(): void {
 // Wait for the browser to finish inserting the pasted text
     setTimeout(() => {
       this._typeOfAuthentication.set({name:'custom JWT',code:'2',jwtString:this.getJwtToken.value});
