@@ -1,13 +1,5 @@
 import {AccountInfo} from '@azure/msal-browser';
 import {JwtTokenResponseDto} from '../dto/JwtTokenResponseDto';
-import { jwtDecode } from "jwt-decode";
-
-interface CustomJwtPayload {
-  sub: string;
-  email: string;
-  name: string;
-  tid?: string; // tenant id if applicable
-}
 
 export function mapTokenToAccountInfo(tokenResponse: JwtTokenResponseDto, rawToken?: string): AccountInfo {
   // Use optional chaining or bracket notation safely
