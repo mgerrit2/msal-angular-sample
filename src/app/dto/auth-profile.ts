@@ -1,5 +1,5 @@
 export class AuthProfile {
-  name: string ='';
-  code: string ='';
-  jwtString: string= '';
+  name ='';
+  code ='';
+  jwtString = '';
 }

@@ -4,5 +4,6 @@ export interface JwtTokenResponseDto {
   oid?: string;
   exp?: number;
   iat?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any; // fallback for other claims
 }

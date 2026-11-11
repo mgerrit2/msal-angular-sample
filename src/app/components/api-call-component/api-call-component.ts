@@ -3,7 +3,7 @@ import {ButtonModule} from 'primeng/button';
 import {RestApi} from '../../rest/rest-api';
 import {firstValueFrom} from 'rxjs';
 import {InputTextModule} from 'primeng/inputtext';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {Accordion, AccordionContent, AccordionHeader, AccordionModule, AccordionPanel} from 'primeng/accordion';
 
@@ -39,7 +39,7 @@ export class ApiCallComponent {
   async callApi(){
 
     try {
-      let result = await firstValueFrom(this.restApi.getProtectedData());
+      const result = await firstValueFrom(this.restApi.getProtectedData());
 
       this.getApiResponseData.setValue(result);
     }catch (e){
