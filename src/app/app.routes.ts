@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import {MsalGuard} from '@azure/msal-angular';
 import {ProfileComponent} from './components/profile-component/profile-component';
 import {Home} from './components/home/home';
 import {ApiCallComponent} from './components/api-call-component/api-call-component';
