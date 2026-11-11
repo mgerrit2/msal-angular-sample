@@ -1,20 +1,23 @@
 <div class="container-fluid mx-auto px-4 py-6 max-w-md">
-  <div *ngIf="profileData">
-    <h2>User Profile</h2>
-    <p><strong>Full Name:</strong> {{ profileData.name }}</p>
-    <p><strong>Email / Username:</strong> {{ profileData.username }}</p>
-    <p><strong>Tenant ID:</strong> {{ profileData.tenantId }}</p>
-    <p><strong>oid:</strong> {{ profileData.idTokenClaims?.oid }}</p>
 
-    <hr>
+  @if(profileData){
+    <div>
+      <h2>User Profile</h2>
+      <p><strong>Full Name:</strong> {{ profileData.name }}</p>
+      <p><strong>Email / Username:</strong> {{ profileData.username }}</p>
+      <p><strong>Tenant ID:</strong> {{ profileData.tenantId }}</p>
+      <p><strong>oid:</strong> {{ profileData.idTokenClaims?.oid }}</p>
 
-    <h3>Extra Token Claims</h3>
-    <ul>
-      <li><strong>First Name (given_name):</strong> {{ idTokenClaims?.given_name }}</li>
-      <li><strong>Last Name (family_name):</strong> {{ idTokenClaims?.family_name }}</li>
-      <li><strong>User Object ID (oid):</strong> {{ idTokenClaims?.oid }}</li>
-    </ul>
-  </div>
+      <hr>
+
+      <h3>Extra Token Claims</h3>
+      <ul>
+        <li><strong>First Name (given_name):</strong> {{ idTokenClaims?.given_name }}</li>
+        <li><strong>Last Name (family_name):</strong> {{ idTokenClaims?.family_name }}</li>
+        <li><strong>User Object ID (oid):</strong> {{ idTokenClaims?.oid }}</li>
+      </ul>
+    </div>
+  }
 
   @if(!profileData){
     <div>

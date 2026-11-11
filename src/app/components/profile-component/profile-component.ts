@@ -16,12 +16,13 @@ import {mapTokenToAccountInfo} from '../../mappings/MapTokenToAccountInfo';
 })
 export class ProfileComponent implements OnInit {
   profileData?: AccountInfo;
-  idTokenClaims: any;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  idTokenClaims?: any;
 
   private app = inject(App);
   private jwtTokenService = inject(RestApi);
-
-  constructor(private authService: MsalService) {}
+  private authService = inject(MsalService);
 
   async ngOnInit(): Promise<void> {
 
@@ -36,7 +37,7 @@ export class ProfileComponent implements OnInit {
 
       try {
 
-        let jwt = await firstValueFrom(this.jwtTokenService.getJwtInfo(this.app.typeOfAuthentication().jwtString));
+        const jwt = await firstValueFrom(this.jwtTokenService.getJwtInfo(this.app.typeOfAuthentication().jwtString));
 
         this.profileData = mapTokenToAccountInfo(jwt)
 
@@ -46,8 +47,5 @@ export class ProfileComponent implements OnInit {
       }
 
     }
-
-    // Haal het actieve account op uit de MSAL instantie
-
   }
 }
